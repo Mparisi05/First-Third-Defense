@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bronco Braves — 1st & 3rd Defense Rotations</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #1a1c20;
+  --surface: #23262b;
+  --surface2: #2c3038;
+  --border: #383c44;
+  --text: #e8e9eb;
+  --text-dim: #8b909a;
+  --accent: #0057b8;
+  --accent-light: #3d8fdb;
+  --accent-glow: rgba(0,87,184,0.25);
+  --green: #2ea043;
+  --green-dim: rgba(46,160,67,0.15);
+  --red: #cf3d3d;
+  --red-dim: rgba(207,61,61,0.15);
+  --yellow: #d4a017;
+  --yellow-dim: rgba(212,160,23,0.15);
+  --orange: #e07020;
+  --gold: #d4a843;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.header {
+  background: linear-gradient(135deg, #0d0e10, #1a1c20);
+  border-bottom: 2px solid var(--accent);
+  padding: 12px 24px;
+  display: flex; align-items: center; gap: 16px;
+  position: sticky; top: 0; z-index: 100;
+}
+
+.header h1 {
+  font-family: 'Oswald', sans-serif; font-weight: 700;
+  font-size: 20px; text-transform: uppercase;
+  letter-spacing: 2px; white-space: nowrap;
+}
+
+.header h1 span { color: var(--accent-light); }
+.header-actions { margin-left: auto; display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+
+.btn {
+  font-family: 'Oswald', sans-serif; font-weight: 500;
+  font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px;
+  padding: 7px 14px; border: 1px solid var(--border);
+  border-radius: 4px; background: var(--surface2);
+  color: var(--text); cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+
+.btn:hover { border-color: var(--accent); background: var(--accent-glow); }
+.btn.primary { background: var(--accent); border-color: var(--accent); }
+.btn.primary:hover { background: var(--accent-light); }
+.btn.danger { border-color: var(--red); color: var(--red); }
+.btn.danger:hover { background: var(--red-dim); }
+
+/* ── ROTATION TABS ── */
+.rotation-tabs-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex; align-items: stretch; gap: 0;
+  overflow-x: auto;
+}
+
+.rot-tab {
+  font-family: 'Oswald', sans-serif; font-weight: 500;
+  font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px;
+  padding: 10px 20px; border: none; background: transparent;
+  color: var(--text-dim); cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.15s; white-space: nowrap;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.rot-tab:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+.rot-tab.active { color: var(--accent-light); border-bottom-color: var(--accent); }
+
+.rot-tab .tab-count {
+  font-size: 10px; font-weight: 700; padding: 1px 6px;
+  border-radius: 8px; background: var(--surface2); color: var(--text-dim);
+}
+
+.rot-tab.active .tab-count { background: var(--accent-glow); color: var(--accent-light); }
+
+.add-rot-btn {
+  font-family: 'Oswald', sans-serif; font-weight: 500;
+  font-size: 18px; padding: 8px 16px; border: none;
+  background: transparent; color: var(--text-dim);
+  cursor: pointer; transition: color 0.15s;
+}
+
+.add-rot-btn:hover { color: var(--accent-light); }
+
+/* ── ATTENDANCE ── */
+.attendance-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 24px;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+
+.attendance-label {
+  font-family: 'Oswald', sans-serif; font-weight: 600;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--text-dim); margin-right: 6px; white-space: nowrap;
+}
+
+.att-player {
+  display: flex; align-items: center; gap: 4px;
+  padding: 3px 8px 3px 4px; border-radius: 4px;
+  background: var(--surface2); border: 1px solid var(--border);
+  cursor: pointer; transition: all 0.12s; user-select: none;
+}
+
+.att-player:hover { border-color: var(--accent); }
+.att-player.absent { opacity: 0.35; border-color: transparent; }
+.att-player.absent:hover { border-color: var(--border); }
+
+.att-player input[type="checkbox"] {
+  width: 13px; height: 13px;
+  accent-color: var(--accent); cursor: pointer; flex-shrink: 0;
+}
+
+.att-name { font-size: 11px; font-weight: 600; white-space: nowrap; }
+
+/* ── ROTATION NAME EDIT ── */
+.rot-name-bar {
+  padding: 8px 24px;
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg); border-bottom: 1px solid var(--border);
+}
+
+.rot-name-input {
+  font-family: 'Oswald', sans-serif; font-weight: 600;
+  font-size: 16px; text-transform: uppercase; letter-spacing: 1px;
+  background: transparent; border: none; border-bottom: 1px dashed var(--border);
+  color: var(--gold); padding: 4px 0; outline: none; width: 300px;
+}
+
+.rot-name-input:focus { border-bottom-color: var(--accent); }
+
+.rot-name-bar .player-count {
+  font-size: 11px; color: var(--text-dim); font-weight: 600;
+}
+
+.rot-name-bar .delete-rot {
+  margin-left: auto;
+  font-family: 'Oswald', sans-serif; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 1px;
+  padding: 5px 12px; border-radius: 4px;
+  border: 1px solid var(--red); background: transparent;
+  color: var(--red); cursor: pointer; transition: all 0.15s;
+}
+
+.rot-name-bar .delete-rot:hover { background: var(--red-dim); }
+
+/* ── LAYOUT ── */
+.main-layout { display: flex; min-height: calc(100vh - 160px); }
+.grid-area { flex: 1; padding: 12px 16px; overflow-x: auto; }
+
+/* ── TABLE ── */
+.rotation-table {
+  width: 100%; min-width: 700px;
+  border-collapse: separate; border-spacing: 2px;
+}
+
+.rotation-table th {
+  font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 12px;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--text-dim); padding: 8px 6px;
+  background: var(--surface); border-radius: 4px 4px 0 0;
+}
+
+.rotation-table th.pos-col { width: 130px; text-align: left; padding-left: 10px; }
+.rotation-table th.rot-col { text-align: center; }
+
+.rotation-table td {
+  background: var(--surface); border-radius: 3px;
+  height: 38px; padding: 2px; vertical-align: middle; position: relative;
+}
+
+.rotation-table td.pos-cell {
+  font-family: 'Oswald', sans-serif; font-weight: 500;
+  font-size: 12px; text-transform: uppercase; letter-spacing: 1px;
+  color: var(--text-dim); padding-left: 10px;
+  background: var(--surface2); white-space: nowrap;
+}
+
+.rotation-table td.pos-cell.bench-cell { color: var(--yellow); font-style: italic; }
+
+td.drop-zone {
+  border: 1px dashed var(--border); cursor: pointer; transition: all 0.12s;
+}
+
+td.drop-zone:hover { border-color: var(--accent); background: var(--accent-glow); }
+td.drop-zone.drag-over { border-color: var(--accent-light); background: var(--accent-glow); box-shadow: inset 0 0 10px var(--accent-glow); }
+td.drop-zone.invalid-drop { border-color: var(--red); background: var(--red-dim); }
+
+.placed-player {
+  font-family: 'Source Sans 3', sans-serif; font-weight: 600; font-size: 11px;
+  padding: 4px 6px; border-radius: 3px;
+  background: var(--accent-glow); border: 1px solid var(--accent);
+  color: var(--text); cursor: grab; text-align: center;
+  position: relative; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+  display: block; margin: 0 auto; width: calc(100% - 4px);
+}
+
+.placed-player:hover { background: rgba(0,87,184,0.4); }
+.placed-player:active { cursor: grabbing; }
+
+.placed-player .rank-ind {
+  font-size: 8px; font-weight: 700;
+  position: absolute; top: 0; right: 2px;
+  color: var(--text-dim);
+}
+
+.placed-player.top-pick { border-color: var(--green); background: var(--green-dim); }
+.placed-player.mid-pick { border-color: var(--yellow); background: var(--yellow-dim); }
+.placed-player.low-pick { border-color: var(--orange); background: rgba(224,112,32,0.15); }
+
+td.bench-drop .placed-player {
+  background: rgba(100,100,100,0.15);
+  border-color: var(--border); color: var(--text-dim);
+}
+
+.suggestion-ghost {
+  font-family: 'Source Sans 3', sans-serif; font-weight: 600; font-size: 10px;
+  padding: 2px 5px; border-radius: 3px; background: transparent;
+  border: 1px dashed var(--border); color: var(--text-dim);
+  opacity: 0.45; text-align: center; display: block;
+  margin: 1px auto; width: calc(100% - 4px);
+  cursor: pointer; transition: all 0.15s;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.suggestion-ghost:hover {
+  opacity: 0.85; border-color: var(--accent);
+  background: var(--accent-glow); color: var(--text);
+}
+
+.suggestion-ghost.top-sug { opacity: 0.55; }
+.suggestion-ghost.mid-sug { opacity: 0.35; }
+.suggestion-ghost.low-sug { opacity: 0.25; font-size: 9px; }
+
+.suggestions-wrap {
+  display: flex; flex-direction: column; gap: 0; width: 100%; padding: 1px 0;
+}
+
+tr.separator-row td { height: 6px; background: transparent; padding: 0; border: none; }
+
+tr.pool-header-row td {
+  font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--text-dim); padding: 6px 6px 2px;
+  background: transparent; border: none; text-align: center;
+}
+
+tr.pool-header-row td.pool-label-cell {
+  text-align: left; padding-left: 10px;
+  color: var(--accent-light); font-size: 11px;
+}
+
+td.pool-cell {
+  background: var(--surface2); border-radius: 4px;
+  padding: 4px 3px; vertical-align: top; border: 1px solid var(--border);
+}
+
+td.pool-cell.pool-label-td {
+  background: transparent; border: none; vertical-align: top; padding-top: 6px;
+}
+
+.pool-chip {
+  font-family: 'Source Sans 3', sans-serif; font-weight: 600; font-size: 10px;
+  padding: 3px 5px; margin-bottom: 2px; border-radius: 3px;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text); cursor: grab; user-select: none;
+  transition: all 0.1s; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+  display: block; text-align: center;
+}
+
+.pool-chip:hover { border-color: var(--accent); background: var(--accent-glow); }
+.pool-chip:active { cursor: grabbing; opacity: 0.5; }
+.pool-chip.dragging { opacity: 0.3; }
+
+.pool-empty {
+  font-size: 9px; color: var(--text-dim);
+  text-align: center; padding: 4px 2px; font-style: italic; opacity: 0.5;
+}
+
+/* ── VALIDATION PANEL ── */
+.validation-panel {
+  width: 240px; min-width: 240px;
+  background: var(--surface); border-left: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow-y: auto;
+}
+
+.panel-title {
+  font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 12px;
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--text-dim); padding: 12px 14px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.validation-list { flex: 1; overflow-y: auto; padding: 6px; }
+
+.v-item {
+  font-size: 11px; padding: 5px 8px; margin-bottom: 2px;
+  border-radius: 3px; display: flex; align-items: flex-start;
+  gap: 5px; line-height: 1.35;
+}
+
+.v-item.error { background: var(--red-dim); color: var(--red); }
+.v-item.warn { background: var(--yellow-dim); color: var(--yellow); }
+.v-item.ok { background: var(--green-dim); color: var(--green); }
+.v-icon { font-size: 12px; flex-shrink: 0; }
+
+.suggest-section { padding: 8px; border-top: 1px solid var(--border); }
+.suggest-section .btn { width: 100%; text-align: center; margin-bottom: 4px; }
+
+/* Context menu */
+.context-menu {
+  position: fixed; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 4px 0; z-index: 200; display: none;
+  min-width: 130px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+.context-menu-item {
+  padding: 7px 12px; font-size: 11px;
+  cursor: pointer; transition: background 0.1s;
+}
+
+.context-menu-item:hover { background: var(--accent-glow); }
+.context-menu-item.danger { color: var(--red); }
+
+@media (max-width: 1100px) {
+  .validation-panel { width: 200px; min-width: 200px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Bronco Braves <span>1st &amp; 3rd Defense</span></h1>
+  <div class="header-actions">
+    <button class="btn" onclick="removeRotationCol()" title="Remove last rotation column">− Rotation</button>
+    <button class="btn" onclick="addRotationCol()" title="Add rotation column">+ Rotation</button>
+    <button class="btn primary" onclick="autoFill()">⚡ Auto-Fill</button>
+    <button class="btn" onclick="exportPrint()">📄 Print</button>
+    <button class="btn danger" onclick="clearAll()">✕ Clear</button>
+  </div>
+</div>
+
+<div class="rotation-tabs-bar" id="rotTabsBar"></div>
+
+<div class="rot-name-bar" id="rotNameBar"></div>
+
+<div class="attendance-bar" id="attendanceBar"></div>
+
+<div class="main-layout">
+  <div class="grid-area">
+    <table class="rotation-table" id="rotationTable"></table>
+  </div>
+  <div class="validation-panel">
+    <div class="panel-title">Validation</div>
+    <div class="validation-list" id="validationList"></div>
+    <div class="suggest-section">
+      <button class="btn primary" onclick="autoFill()">⚡ Auto-Fill All</button>
+      <button class="btn" onclick="suggestRotation()">💡 Suggest Next</button>
+    </div>
+  </div>
+</div>
+
+<div class="context-menu" id="contextMenu">
+  <div class="context-menu-item danger" onclick="removeFromContext()">Remove Player</div>
+</div>
+
+<script>
+const PLAYERS = [
+  "J. Reinhardt","H. Reinhardt","B. Cox","R. Sullivan",
+  "G. Williams","C. Coleman","M. Cage","M. Warren",
+  "L. Fraser","N. Crosby","G. Sprague","F. Butler"
+];
+
+// Infield-only positions for 1st & 3rd defense drill
+const POSITIONS = [
+  "Pitcher","Catcher 1","Catcher 2","Catcher 3",
+  "First Base","Second Base","Third Base","Shortstop"
+];
+
+const POS_ABBREV = {
+  "Pitcher":"P","Catcher 1":"C1","Catcher 2":"C2","Catcher 3":"C3",
+  "First Base":"1B","Second Base":"2B","Third Base":"3B","Shortstop":"SS"
+};
+
+// Map catcher slots to base position for proficiency
+function basePos(pos) {
+  if (pos.startsWith("Catcher")) return "Catcher";
+  return pos;
+}
+
+const PROFICIENCY = {
+  "Pitcher":["J. Reinhardt","B. Cox","R. Sullivan","M. Cage","N. Crosby","G. Sprague","G. Williams","C. Coleman"],
+  "Catcher":["B. Cox","R. Sullivan","C. Coleman","N. Crosby","G. Sprague"],
+  "First Base":["R. Sullivan","B. Cox","L. Fraser","C. Coleman","N. Crosby"],
+  "Second Base":["G. Williams","J. Reinhardt","F. Butler","C. Coleman","M. Warren","M. Cage"],
+  "Third Base":["M. Cage","J. Reinhardt","R. Sullivan","L. Fraser","N. Crosby","H. Reinhardt","G. Sprague","B. Cox","C. Coleman"],
+  "Shortstop":["M. Cage","F. Butler","J. Reinhardt","R. Sullivan","G. Williams"]
+};
+
+const PLAYER_POSITIONS = {
+  "J. Reinhardt":["Pitcher","Third Base","Second Base","Shortstop"],
+  "H. Reinhardt":["Pitcher","Third Base"],
+  "B. Cox":["Catcher","Pitcher","First Base","Third Base"],
+  "R. Sullivan":["First Base","Catcher","Pitcher","Third Base","Shortstop","Second Base"],
+  "G. Williams":["Second Base","Shortstop","Pitcher","Third Base"],
+  "C. Coleman":["Catcher","Second Base","First Base","Third Base","Pitcher"],
+  "M. Cage":["Shortstop","Third Base","Pitcher","Second Base"],
+  "M. Warren":["Second Base"],
+  "L. Fraser":["Third Base","First Base"],
+  "N. Crosby":["Third Base","Pitcher","Catcher","First Base"],
+  "G. Sprague":["Third Base","Catcher","Pitcher"],
+  "F. Butler":["Shortstop","Second Base"]
+};
+
+const DEFAULT_ROTATIONS = 4;
+const FIELD_SPOTS = POSITIONS.length; // 8
+
+// ── MULTIPLE ROTATION PRESETS ──
+let presets = [
+  { name: "Full Squad (12)", absent: new Set(), numRot: DEFAULT_ROTATIONS, grid: makeEmptyGrid(DEFAULT_ROTATIONS) }
+];
+let activePreset = 0;
+
+function makeEmptyGrid(n) {
+  const g = [];
+  for (let i = 0; i < n; i++) {
+    g[i] = {};
+    POSITIONS.forEach(p => g[i][p] = null);
+    for (let b = 0; b < 4; b++) g[i]["Bench"+b] = null;
+  }
+  return g;
+}
+
+function numRot() { return cur().numRot; }
+function cur() { return presets[activePreset]; }
+
+function addRotationCol() {
+  const p = cur();
+  p.numRot++;
+  const newRot = {};
+  POSITIONS.forEach(pos => newRot[pos] = null);
+  const bs = getBenchSpots();
+  for (let b = 0; b < bs; b++) newRot["Bench"+b] = null;
+  p.grid.push(newRot);
+  render();
+}
+
+function removeRotationCol() {
+  const p = cur();
+  if (p.numRot <= 1) return;
+  p.numRot--;
+  p.grid.pop();
+  render();
+}
+
+// Drag state
+let dragPlayer = null;
+let dragSource = null;
+let contextTarget = null;
+
+function getActivePlayers() { return PLAYERS.filter(p => !cur().absent.has(p)); }
+function getBenchSpots() { return Math.max(0, getActivePlayers().length - FIELD_SPOTS); }
+
+function rebuildBenchSlots() {
+  const bs = getBenchSpots();
+  const g = cur().grid;
+  for (let i = 0; i < numRot(); i++) {
+    for (let b = 0; b < 12; b++) {
+      if (b >= bs && g[i]["Bench"+b]) g[i]["Bench"+b] = null;
+      if (b >= bs) delete g[i]["Bench"+b];
+      if (b < bs && !(("Bench"+b) in g[i])) g[i]["Bench"+b] = null;
+    }
+  }
+}
+
+function canPlay(player, pos) {
+  if (pos.startsWith("Bench")) return true;
+  const bp = basePos(pos);
+  return PLAYER_POSITIONS[player]?.includes(bp);
+}
+
+function getProfRank(player, pos) {
+  if (pos.startsWith("Bench")) return null;
+  const bp = basePos(pos);
+  const list = PROFICIENCY[bp];
+  if (!list) return null;
+  const idx = list.indexOf(player);
+  return idx >= 0 ? idx+1 : null;
+}
+
+function getRankClass(rank, pos) {
+  if (rank === null || pos.startsWith("Bench")) return "";
+  const bp = basePos(pos);
+  const total = PROFICIENCY[bp]?.length || 12;
+  if (rank <= 2) return "top-pick";
+  const pct = rank / total;
+  if (pct <= 0.33) return "top-pick";
+  if (pct <= 0.66) return "mid-pick";
+  return "low-pick";
+}
+
+function getPlayerRotations(player) {
+  let c = 0;
+  const g = cur().grid;
+  for (let i = 0; i < numRot(); i++) if (POSITIONS.some(p => g[i][p] === player)) c++;
+  return c;
+}
+
+function getPlayerPositionInRotation(player, rot) {
+  const g = cur().grid;
+  for (const pos of POSITIONS) if (g[rot][pos] === player) return pos;
+  for (let b = 0; b < 12; b++) if (g[rot]["Bench"+b] === player) return "Bench"+b;
+  return null;
+}
+
+function getAvailableForRotation(rot) {
+  const g = cur().grid;
+  const assigned = new Set();
+  POSITIONS.forEach(pos => { if (g[rot][pos]) assigned.add(g[rot][pos]); });
+  const bs = getBenchSpots();
+  for (let b = 0; b < bs; b++) if (g[rot]["Bench"+b]) assigned.add(g[rot]["Bench"+b]);
+  return getActivePlayers().filter(p => !assigned.has(p));
+}
+
+function getFilledCount(rot) {
+  return POSITIONS.filter(pos => cur().grid[rot][pos] !== null).length;
+}
+
+function getSuggestions(rot, pos, max = 3) {
+  if (getFilledCount(rot) < 1) return [];
+  if (pos.startsWith("Bench")) return [];
+  const available = getAvailableForRotation(rot);
+  return available
+    .filter(p => canPlay(p, pos))
+    .sort((a, b) => (getProfRank(a, pos) || 99) - (getProfRank(b, pos) || 99))
+    .slice(0, max);
+}
+
+function autoBench() {
+  const bs = getBenchSpots();
+  const g = cur().grid;
+  for (let i = 0; i < numRot(); i++) {
+    const available = getAvailableForRotation(i);
+    let openBench = 0;
+    for (let b = 0; b < bs; b++) if (!g[i]["Bench"+b]) openBench++;
+    if (openBench > 0 && available.length <= openBench) {
+      let bIdx = 0;
+      for (const player of available) {
+        while (bIdx < bs && g[i]["Bench"+bIdx]) bIdx++;
+        if (bIdx < bs) { g[i]["Bench"+bIdx] = player; bIdx++; }
+      }
+    }
+  }
+}
+
+// ── PRESETS MANAGEMENT ──
+function addPreset() {
+  const ap = getActivePlayers();
+  const nr = numRot();
+  presets.push({
+    name: `Rotation ${presets.length + 1} (${ap.length} players)`,
+    absent: new Set(cur().absent),
+    numRot: nr,
+    grid: makeEmptyGrid(nr)
+  });
+  activePreset = presets.length - 1;
+  render();
+}
+
+function deletePreset() {
+  if (presets.length <= 1) return;
+  presets.splice(activePreset, 1);
+  activePreset = Math.min(activePreset, presets.length - 1);
+  render();
+}
+
+function switchPreset(idx) {
+  activePreset = idx;
+  render();
+}
+
+// ── VALIDATION ──
+function validate() {
+  const issues = [];
+  const ap = getActivePlayers();
+  const g = cur().grid;
+  const bs = getBenchSpots();
+
+  for (let i = 0; i < numRot(); i++) {
+    const seen = {};
+    [...POSITIONS,...Array.from({length:bs},(_,b)=>"Bench"+b)].forEach(pos => {
+      const p = g[i][pos];
+      if (p) { if (seen[p]) issues.push({type:'error',msg:`${p} assigned twice in rotation ${i+1}`}); seen[p]=true; }
+    });
+    let filled = POSITIONS.filter(p => g[i][p] !== null).length;
+    if (filled > 0 && filled < FIELD_SPOTS)
+      issues.push({type:'warn',msg:`Rotation ${i+1}: ${FIELD_SPOTS-filled} empty spot${FIELD_SPOTS-filled>1?'s':''}`});
+  }
+
+  if (issues.length === 0) {
+    const totalFilled = g.reduce((n,r) => n + POSITIONS.filter(p => r[p] !== null).length, 0);
+    if (totalFilled === 0) issues.push({type:'ok',msg:'Drag players or use Auto-Fill to start'});
+    else if (totalFilled === numRot() * FIELD_SPOTS) issues.push({type:'ok',msg:'All rotations filled ✓'});
+  }
+
+  return issues;
+}
+
+// ── AUTO-FILL ──
+function autoFill() {
+  clearAll();
+  const ap = getActivePlayers();
+  const g = cur().grid;
+  const bs = getBenchSpots();
+
+  for (let i = 0; i < numRot(); i++) {
+    const assigned = new Set();
+
+    // Sort positions by scarcity
+    const posByScar = [...POSITIONS].sort((a,b) =>
+      ap.filter(p => !assigned.has(p) && canPlay(p,a)).length -
+      ap.filter(p => !assigned.has(p) && canPlay(p,b)).length
+    );
+
+    // Try not to repeat same position consecutively
+    const prev = {};
+    if (i > 0) POSITIONS.forEach(pos => { if (g[i-1][pos]) prev[g[i-1][pos]] = pos; });
+
+    for (const pos of posByScar) {
+      const eligible = ap.filter(p => !assigned.has(p) && canPlay(p, pos))
+        .sort((a,b) => {
+          const ra = getProfRank(a,pos) || 99;
+          const rb = getProfRank(b,pos) || 99;
+          const pa = prev[a] === pos ? 3 : 0;
+          const pb = prev[b] === pos ? 3 : 0;
+          return (ra + pa) - (rb + pb);
+        });
+      if (eligible.length > 0) { g[i][pos] = eligible[0]; assigned.add(eligible[0]); }
+    }
+
+    // Bench remaining
+    const remaining = ap.filter(p => !assigned.has(p));
+    remaining.forEach((p, idx) => { if (idx < bs) g[i]["Bench"+idx] = p; });
+  }
+  render();
+}
+
+function suggestRotation() {
+  const g = cur().grid;
+  let ti = -1;
+  for (let i = 0; i < numRot(); i++) if (POSITIONS.filter(p => g[i][p] !== null).length < FIELD_SPOTS) { ti = i; break; }
+  if (ti === -1) return;
+
+  const ap = getActivePlayers();
+  const bs = getBenchSpots();
+  const assigned = new Set();
+  POSITIONS.forEach(pos => { if (g[ti][pos]) assigned.add(g[ti][pos]); });
+
+  const prev = {};
+  if (ti > 0) POSITIONS.forEach(pos => { if (g[ti-1][pos]) prev[g[ti-1][pos]] = pos; });
+
+  const unfilled = POSITIONS.filter(p => !g[ti][p]);
+  const pool = ap.filter(p => !assigned.has(p));
+
+  unfilled.sort((a,b) => pool.filter(p => canPlay(p,a)).length - pool.filter(p => canPlay(p,b)).length);
+
+  for (const pos of unfilled) {
+    const el = pool.filter(p => !assigned.has(p) && canPlay(p, pos))
+      .sort((a,b) => {
+        const ra = getProfRank(a,pos) || 99;
+        const rb = getProfRank(b,pos) || 99;
+        return (ra + (prev[a]===pos?3:0)) - (rb + (prev[b]===pos?3:0));
+      });
+    if (el.length > 0) { g[ti][pos] = el[0]; assigned.add(el[0]); }
+  }
+
+  const benched = pool.filter(p => !assigned.has(p));
+  benched.forEach((p,idx) => { if (idx < bs) g[ti]["Bench"+idx] = p; });
+  render();
+}
+
+function clearAll() {
+  const g = cur().grid;
+  for (let i = 0; i < numRot(); i++) {
+    POSITIONS.forEach(p => g[i][p] = null);
+    for (let b = 0; b < 12; b++) if (("Bench"+b) in g[i]) g[i]["Bench"+b] = null;
+  }
+  render();
+}
+
+// ============ RENDER ============
+function render() {
+  autoBench();
+  renderTabs();
+  renderNameBar();
+  renderAttendance();
+  renderTable();
+  renderValidation();
+}
+
+function renderTabs() {
+  const bar = document.getElementById('rotTabsBar');
+  bar.innerHTML = '';
+  presets.forEach((p, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'rot-tab' + (idx === activePreset ? ' active' : '');
+    const playerCount = PLAYERS.filter(pl => !p.absent.has(pl)).length;
+    btn.innerHTML = `${p.name} <span class="tab-count">${playerCount}</span>`;
+    btn.onclick = () => switchPreset(idx);
+    bar.appendChild(btn);
+  });
+  const addBtn = document.createElement('button');
+  addBtn.className = 'add-rot-btn';
+  addBtn.textContent = '+';
+  addBtn.title = 'Add new rotation preset';
+  addBtn.onclick = addPreset;
+  bar.appendChild(addBtn);
+}
+
+function renderNameBar() {
+  const bar = document.getElementById('rotNameBar');
+  const ap = getActivePlayers();
+  bar.innerHTML = `
+    <input class="rot-name-input" value="${cur().name}" oninput="cur().name=this.value;renderTabs();">
+    <span class="player-count">${ap.length} of ${PLAYERS.length} players · ${numRot()} rotations · ${FIELD_SPOTS} positions · ${getBenchSpots()} bench</span>
+    ${presets.length > 1 ? '<button class="delete-rot" onclick="deletePreset()">✕ Delete Preset</button>' : ''}
+  `;
+}
+
+function renderAttendance() {
+  const el = document.getElementById('attendanceBar');
+  el.innerHTML = '<span class="attendance-label">Attendance</span>';
+  PLAYERS.forEach(player => {
+    const isAbsent = cur().absent.has(player);
+    const div = document.createElement('div');
+    div.className = 'att-player' + (isAbsent ? ' absent' : '');
+    div.innerHTML = `<input type="checkbox" ${isAbsent?'':'checked'}><span class="att-name">${player}</span>`;
+    div.querySelector('input').addEventListener('change', (e) => {
+      if (!e.target.checked) {
+        cur().absent.add(player);
+        const g = cur().grid;
+        for (let i = 0; i < numRot(); i++) {
+          [...POSITIONS,...Array.from({length:12},(_,b)=>"Bench"+b)].forEach(pos => {
+            if (g[i][pos] === player) g[i][pos] = null;
+          });
+        }
+      } else { cur().absent.delete(player); }
+      rebuildBenchSlots();
+      render();
+    });
+    el.appendChild(div);
+  });
+}
+
+function renderTable() {
+  const table = document.getElementById('rotationTable');
+  table.innerHTML = '';
+  const g = cur().grid;
+  const bs = getBenchSpots();
+  const allPositions = [...POSITIONS, ...Array.from({length:bs},(_,b)=>"Bench"+b)];
+
+  const thead = document.createElement('thead');
+  const hr = document.createElement('tr');
+  const thPos = document.createElement('th');
+  thPos.className = 'pos-col'; thPos.textContent = 'Position';
+  hr.appendChild(thPos);
+  for (let i = 0; i < numRot(); i++) {
+    const th = document.createElement('th');
+    th.className = 'rot-col'; th.textContent = `Rotation ${i+1}`;
+    hr.appendChild(th);
+  }
+  thead.appendChild(hr);
+  table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+
+  allPositions.forEach(pos => {
+    const tr = document.createElement('tr');
+    const isBench = pos.startsWith("Bench");
+
+    const tdLabel = document.createElement('td');
+    tdLabel.className = 'pos-cell' + (isBench ? ' bench-cell' : '');
+    tdLabel.textContent = isBench ? `Bench ${parseInt(pos.replace('Bench',''))+1}` : `${POS_ABBREV[pos]}  ${pos}`;
+    tr.appendChild(tdLabel);
+
+    for (let i = 0; i < numRot(); i++) {
+      const td = document.createElement('td');
+      const player = g[i][pos];
+
+      if (player) {
+        const rank = getProfRank(player, pos);
+        const rc = getRankClass(rank, pos);
+        const chip = document.createElement('div');
+        chip.className = `placed-player ${rc}`;
+        chip.textContent = player;
+        if (rank) chip.innerHTML += `<span class="rank-ind">#${rank}</span>`;
+        if (isBench) td.classList.add('bench-drop');
+
+        chip.draggable = true;
+        chip.addEventListener('dragstart', (e) => {
+          dragPlayer = player; dragSource = {inning:i, position:pos};
+          chip.style.opacity = '0.4';
+          e.dataTransfer.effectAllowed = 'move';
+        });
+        chip.addEventListener('dragend', () => { chip.style.opacity='1'; dragPlayer=null; dragSource=null; });
+        chip.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+          contextTarget = {inning:i,position:pos};
+          const menu = document.getElementById('contextMenu');
+          menu.style.display='block'; menu.style.left=e.clientX+'px'; menu.style.top=e.clientY+'px';
+        });
+        chip.addEventListener('dblclick', () => { g[i][pos]=null; render(); });
+        td.appendChild(chip);
+      } else {
+        td.classList.add('drop-zone');
+        if (isBench) td.classList.add('bench-drop');
+
+        const suggestions = getSuggestions(i, pos);
+        if (suggestions.length > 0) {
+          const wrap = document.createElement('div');
+          wrap.className = 'suggestions-wrap';
+          suggestions.forEach((sug, idx) => {
+            const ghost = document.createElement('div');
+            ghost.className = 'suggestion-ghost ' + (idx===0?'top-sug':idx===1?'mid-sug':'low-sug');
+            const rank = getProfRank(sug, pos);
+            ghost.textContent = sug + (rank ? ` #${rank}` : '');
+            ghost.title = `Click to place ${sug}`;
+            ghost.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const existingPos = getPlayerPositionInRotation(sug, i);
+              if (existingPos) g[i][existingPos] = null;
+              g[i][pos] = sug;
+              render();
+            });
+            wrap.appendChild(ghost);
+          });
+          td.appendChild(wrap);
+        }
+      }
+
+      td.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        if (!dragPlayer) return;
+        if (!isBench && !canPlay(dragPlayer, pos)) td.classList.add('invalid-drop');
+        else td.classList.add('drag-over');
+      });
+      td.addEventListener('dragleave', () => td.classList.remove('drag-over','invalid-drop'));
+      td.addEventListener('drop', (e) => {
+        e.preventDefault();
+        td.classList.remove('drag-over','invalid-drop');
+        if (!dragPlayer) return;
+        if (!isBench && !canPlay(dragPlayer, pos)) return;
+
+        const existingPos = getPlayerPositionInRotation(dragPlayer, i);
+        if (existingPos && !(dragSource && dragSource.inning===i && dragSource.position===existingPos))
+          g[i][existingPos] = null;
+
+        if (dragSource && dragSource !== 'pool')
+          g[dragSource.inning][dragSource.position] = null;
+
+        const displaced = g[i][pos];
+        if (displaced && dragSource && dragSource !== 'pool')
+          g[dragSource.inning][dragSource.position] = displaced;
+
+        g[i][pos] = dragPlayer;
+        dragPlayer=null; dragSource=null;
+        render();
+      });
+
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  });
+
+  // Separator
+  const sepTr = document.createElement('tr');
+  sepTr.className = 'separator-row';
+  for (let c = 0; c <= numRot(); c++) sepTr.appendChild(document.createElement('td'));
+  tbody.appendChild(sepTr);
+
+  // Pool header
+  const phTr = document.createElement('tr');
+  phTr.className = 'pool-header-row';
+  const plTd = document.createElement('td');
+  plTd.className = 'pool-label-cell'; plTd.textContent = 'Available';
+  phTr.appendChild(plTd);
+  for (let i = 0; i < numRot(); i++) {
+    const td = document.createElement('td');
+    const avail = getAvailableForRotation(i);
+    td.textContent = `${avail.length} player${avail.length!==1?'s':''}`;
+    phTr.appendChild(td);
+  }
+  tbody.appendChild(phTr);
+
+  // Pool row
+  const poolTr = document.createElement('tr');
+  const poolLabel = document.createElement('td');
+  poolLabel.className = 'pool-cell pool-label-td';
+  poolTr.appendChild(poolLabel);
+
+  for (let i = 0; i < numRot(); i++) {
+    const td = document.createElement('td');
+    td.className = 'pool-cell';
+    const available = getAvailableForRotation(i);
+
+    if (available.length === 0) {
+      td.innerHTML = '<div class="pool-empty">All placed</div>';
+    } else {
+      available.forEach(player => {
+        const chip = document.createElement('div');
+        chip.className = 'pool-chip';
+        chip.textContent = player;
+        chip.draggable = true;
+        chip.addEventListener('dragstart', (e) => {
+          dragPlayer = player; dragSource = 'pool';
+          chip.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+        });
+        chip.addEventListener('dragend', () => { chip.classList.remove('dragging'); dragPlayer=null; dragSource=null; });
+        td.appendChild(chip);
+      });
+    }
+
+    td.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (dragPlayer && dragSource && dragSource !== 'pool' && dragSource.inning === i)
+        td.style.borderColor = 'var(--accent)';
+    });
+    td.addEventListener('dragleave', () => { td.style.borderColor = ''; });
+    td.addEventListener('drop', (e) => {
+      e.preventDefault(); td.style.borderColor = '';
+      if (dragPlayer && dragSource && dragSource !== 'pool' && dragSource.inning === i) {
+        g[dragSource.inning][dragSource.position] = null;
+        dragPlayer=null; dragSource=null; render();
+      }
+    });
+
+    poolTr.appendChild(td);
+  }
+  tbody.appendChild(poolTr);
+  table.appendChild(tbody);
+}
+
+function renderValidation() {
+  const el = document.getElementById('validationList');
+  const issues = validate();
+  const ap = getActivePlayers();
+  el.innerHTML = '';
+
+  const sh = document.createElement('div');
+  sh.style.cssText = 'font-family:Oswald;font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);padding:6px 4px 4px;';
+  sh.textContent = 'Player Coverage';
+  el.appendChild(sh);
+
+  ap.forEach(player => {
+    const rots = getPlayerRotations(player);
+    let status = 'ok', msg = `${player}: ${rots}/${numRot()}`;
+    if (rots === 0) { status = 'warn'; msg += ' (none)'; }
+    else if (rots < numRot()) { status = 'warn'; msg += ` (sits ${numRot() - rots})`; }
+
+    // Check position variety
+    const positions = new Set();
+    for (let i = 0; i < numRot(); i++) {
+      const p = getPlayerPositionInRotation(player, i);
+      if (p && !p.startsWith('Bench')) positions.add(basePos(p));
+    }
+    if (positions.size === 1 && rots > 1) msg += ` · same pos`;
+
+    const item = document.createElement('div');
+    item.className = `v-item ${status}`;
+    item.innerHTML = `<span class="v-icon">${status==='ok'?'✓':'!'}</span><span>${msg}</span>`;
+    el.appendChild(item);
+  });
+
+  if (issues.length > 0) {
+    const ih = document.createElement('div');
+    ih.style.cssText = 'font-family:Oswald;font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dim);padding:10px 4px 4px;';
+    ih.textContent = 'Issues';
+    el.appendChild(ih);
+    issues.forEach(issue => {
+      const item = document.createElement('div');
+      item.className = `v-item ${issue.type}`;
+      item.innerHTML = `<span class="v-icon">${issue.type==='ok'?'✓':issue.type==='warn'?'!':'✕'}</span><span>${issue.msg}</span>`;
+      el.appendChild(item);
+    });
+  }
+}
+
+// Context menu
+document.addEventListener('click', () => document.getElementById('contextMenu').style.display='none');
+function removeFromContext() {
+  if (contextTarget) { cur().grid[contextTarget.inning][contextTarget.position]=null; contextTarget=null; render(); }
+}
+
+// Print
+function exportPrint() {
+  const g = cur().grid;
+  const bs = getBenchSpots();
+  const allPos = [...POSITIONS, ...Array.from({length:bs},(_,b)=>"Bench"+b)];
+  const ap = getActivePlayers();
+  const today = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  let tableRows = '';
+  allPos.forEach((pos, rowIdx) => {
+    const isBench = pos.startsWith("Bench");
+    const label = isBench ? `Bench ${parseInt(pos.replace('Bench',''))+1}` : `${POS_ABBREV[pos]} &nbsp;${pos}`;
+    const rowBg = isBench ? '#fffcf0' : (rowIdx%2===0?'#fff':'#f5f6f7');
+    const labelColor = isBench ? '#b48a14' : '#25282a';
+    const labelStyle = isBench ? 'font-style:italic;' : '';
+
+    let cells = `<td style="padding:6px 8px;font-weight:700;font-size:11px;color:${labelColor};background:${rowBg};border-bottom:1px solid #ddd;white-space:nowrap;${labelStyle}">${label}</td>`;
+
+    for (let i = 0; i < numRot(); i++) {
+      const player = g[i][pos];
+      let cellContent = '';
+      if (player) {
+        const chipBg = isBench ? '#eee' : '#e8edf2';
+        const chipBorder = isBench ? '#bbb' : '#9aa5b1';
+        const chipColor = isBench ? '#5b6770' : '#25282a';
+        cellContent = `<div style="display:inline-block;padding:3px 8px;border-radius:4px;background:${chipBg};border:1.5px solid ${chipBorder};font-weight:700;font-size:10px;color:${chipColor};white-space:nowrap;">${player}</div>`;
+      }
+      cells += `<td style="padding:4px 3px;text-align:center;background:${rowBg};border-bottom:1px solid #ddd;">${cellContent}</td>`;
+    }
+    tableRows += `<tr>${cells}</tr>`;
+  });
+
+  let headerCells = '<th style="padding:8px 6px;text-align:left;font-size:10px;color:#fff;background:#0057b8;">POSITION</th>';
+  for (let i = 0; i < numRot(); i++) {
+    headerCells += `<th style="padding:8px 6px;text-align:center;font-size:10px;color:#fff;background:#0057b8;">ROTATION ${i+1}</th>`;
+  }
+
+  let absentHtml = '';
+  if (cur().absent.size > 0) {
+    absentHtml = `<div style="font-size:9px;color:#cf3d3d;margin-bottom:6px;">Absent: ${[...cur().absent].join(', ')}</div>`;
+  }
+
+  const html = `<!DOCTYPE html><html><head><title>Bronco Braves 1st & 3rd Defense</title>
+<style>@page{size:letter landscape;margin:0.4in;}@media print{body{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}}body{font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;margin:0;padding:24px;}table{width:100%;border-collapse:collapse;border:1.5px solid #5b6770;}th,td{border-left:1px solid #ddd;}th:first-child,td:first-child{border-left:none;}</style>
+</head><body>
+<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+  <div><span style="font-size:22px;font-weight:800;color:#25282a;letter-spacing:1px;">BRONCO BRAVES</span><span style="font-size:15px;color:#5b6770;margin-left:10px;">1st &amp; 3rd Defense — ${cur().name}</span></div>
+  <div style="text-align:right;"><div style="font-size:10px;color:#5b6770;">${today}</div><div style="font-size:10px;color:#5b6770;">${ap.length} Players Active</div></div>
+</div>
+${absentHtml}
+<table><thead><tr>${headerCells}</tr></thead><tbody>${tableRows}</tbody></table>
+</body></html>`;
+
+  const printWindow = window.open('','_blank');
+  printWindow.document.write(html);
+  printWindow.document.close();
+  printWindow.focus();
+  setTimeout(() => printWindow.print(), 400);
+}
+
+render();
+</script>
+</body>
+</html>
